@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Calm Money System — Free Budget Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sage:#7d9b6e;--sage-light:#b8cdb0;--sage-pale:#eef3eb;
+  --cream:#f8f5f0;--warm:#fdfcfa;--ink:#252520;--muted:#7a7971;
+  --border:rgba(125,155,110,0.18);--accent:#4e7a3e;
+  --gold:#c9a84c;--terra:#c4714a;--blue:#5a7fa0;--joy:#9b7ab5;
+  --giving:#c98b5a;--r:16px;
+  --pro:#4e7a3e;--family:#5a7fa0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--warm);color:var(--ink);font-weight:300;overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:300;padding:1rem 2.5rem;display:flex;justify-content:space-between;align-items:center;background:rgba(253,252,250,0.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--ink);text-decoration:none;letter-spacing:.04em;}
+.logo span{color:var(--sage);}
+.nav-links{display:flex;gap:2rem;align-items:center;}
+.nav-links a{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--ink);}
+.nav-cta{background:var(--ink);color:white!important;padding:.45rem 1.2rem;border-radius:2rem;font-size:.76rem!important;}
+.nav-cta:hover{background:var(--accent)!important;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8rem 2.5rem 5rem;text-align:center;position:relative;overflow:hidden;}
+.hero-orb{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(125,155,110,.09) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-60%);pointer-events:none;}
+.hero-orb2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.06) 0%,transparent 70%);bottom:10%;right:10%;pointer-events:none;}
+.pill{display:inline-flex;align-items:center;gap:.5rem;background:var(--sage-pale);color:var(--accent);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;padding:.35rem 1rem;border-radius:2rem;border:1px solid var(--border);margin-bottom:2rem;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,5.8rem);font-weight:300;line-height:1.05;letter-spacing:-.01em;margin-bottom:1.5rem;max-width:860px;}
+.hero h1 em{font-style:italic;color:var(--sage);}
+.hero-sub{font-size:1.05rem;color:var(--muted);line-height:1.8;max-width:520px;margin:0 auto 2.8rem;}
+.hero-actions{display:flex;gap:1rem;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:1.2rem;}
+.btn-dark{background:var(--ink);color:white;padding:.9rem 2rem;border-radius:2rem;font-family:'DM Sans',sans-serif;font-size:.85rem;letter-spacing:.06em;text-decoration:none;transition:all .25s;display:inline-flex;align-items:center;gap:.5rem;border:none;cursor:pointer;}
+.btn-dark:hover{background:var(--accent);transform:translateY(-2px);}
+.btn-ghost{color:var(--muted);font-size:.85rem;text-decoration:none;border-bottom:1px solid var(--sage-light);padding-bottom:2px;transition:color .2s;}
+.btn-ghost:hover{color:var(--ink);}
+.hero-trust{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem;}
+.trust-item{font-size:.75rem;color:var(--muted);display:flex;align-items:center;gap:.4rem;}
+
+/* MARQUEE */
+.marquee{background:var(--sage-pale);padding:.8rem 0;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.marquee-inner{display:flex;gap:3rem;animation:scroll 28s linear infinite;width:max-content;}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.m-item{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);white-space:nowrap;display:flex;align-items:center;gap:.5rem;}
+.m-dot{width:3px;height:3px;border-radius:50%;background:var(--sage);}
+
+/* SECTIONS */
+section{padding:6rem 2.5rem;}
+.s-tag{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--sage);display:block;margin-bottom:.9rem;}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.4rem);font-weight:300;line-height:1.15;}
+.s-title em{font-style:italic;color:var(--sage);}
+.s-body{font-size:.97rem;line-height:1.8;color:var(--muted);max-width:520px;}
+
+/* FREE TOOL */
+.tool-wrap{max-width:1200px;margin:0 auto;}
+.tool-header{text-align:center;margin-bottom:2.5rem;}
+.settings-bar{display:flex;gap:.8rem;justify-content:center;margin-bottom:2rem;flex-wrap:wrap;}
+.setting-pill{display:flex;align-items:center;gap:.5rem;background:white;border:1px solid var(--border);border-radius:2rem;padding:.4rem 1rem;}
+.setting-pill label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.setting-pill select,.setting-pill input{border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--ink);background:transparent;cursor:pointer;}
+.tool-grid{display:grid;grid-template-columns:360px 1fr;gap:1.5rem;align-items:start;}
+@media(max-width:960px){.tool-grid{grid-template-columns:1fr;}}
+
+/* INPUT PANEL */
+.input-panel{display:flex;flex-direction:column;gap:.8rem;}
+.cat-block{background:white;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.cat-hdr{display:flex;align-items:center;gap:.6rem;padding:.85rem 1rem;cursor:pointer;user-select:none;transition:background .15s;}
+.cat-hdr:hover{background:var(--sage-pale);}
+.cat-hdr .emoji{font-size:1rem;}
+.cat-hdr .name{font-size:.85rem;font-weight:500;flex:1;}
+.cat-hdr .tot{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--muted);}
+.cat-hdr .chev{font-size:.65rem;color:var(--muted);transition:transform .2s;}
+.cat-block.open .chev{transform:rotate(180deg);}
+.cat-body{display:none;padding:.5rem .7rem .7rem;}
+.cat-block.open .cat-body{display:block;}
+.col-labels{display:flex;justify-content:flex-end;gap:.4rem;padding:.15rem .3rem .35rem;border-bottom:1px solid var(--border);margin-bottom:.4rem;}
+.col-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);width:88px;text-align:center;}
+.irow{display:flex;align-items:center;justify-content:space-between;padding:.35rem .3rem;border-radius:8px;transition:background .12s;}
+.irow:hover{background:var(--sage-pale);}
+.irow-label{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:.35rem;}
+.irow-inputs{display:flex;gap:.4rem;}
+.inp-wrap{display:flex;align-items:center;gap:.2rem;background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:.28rem .55rem;}
+.sym{font-size:.72rem;color:var(--muted);}
+.amt{width:76px;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--ink);background:transparent;text-align:right;}
+.amt::placeholder{color:var(--sage-light);}
+
+/* RESULTS */
+.results-panel{display:flex;flex-direction:column;gap:1.1rem;}
+
+/* SUMMARY */
+.sum-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;}
+.sum-card{background:white;border:1px solid var(--border);border-radius:var(--r);padding:1.2rem 1rem;text-align:center;position:relative;overflow:hidden;}
+.sum-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;}
+.sum-card.inc::after{background:var(--sage);}
+.sum-card.out::after{background:var(--terra);}
+.sum-card.lft::after{background:var(--gold);}
+.s-lbl{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:.5rem;}
+.s-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;display:block;line-height:1;}
+.s-val.g{color:var(--accent);}
+.s-val.r{color:var(--terra);}
+.s-val.gold{color:var(--gold);}
+.s-note{font-size:.68rem;color:var(--muted);margin-top:.3rem;display:block;}
+
+/* DAILY */
+.daily-card{background:var(--ink);border-radius:var(--r);padding:1.4rem 1.8rem;color:white;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;}
+.daily-card h3{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:300;opacity:.5;margin-bottom:.25rem;}
+.daily-num{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;line-height:1;}
+.daily-note{font-size:.72rem;opacity:.4;margin-top:.3rem;}
+.ring-wrap{position:relative;width:76px;height:76px;flex-shrink:0;}
+.ring-wrap svg{transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.1);stroke-width:6;}
+.ring-arc{fill:none;stroke:var(--sage-light);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .8s ease;}
+.ring-lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.6rem;opacity:.5;letter-spacing:.06em;text-transform:uppercase;}
+
+/* SAVINGS BAR */
+.sav-card{background:white;border:1px solid var(--border);border-radius:var(--r);padding:1.3rem 1.4rem;}
+.sav-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.sav-hdr h3{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;}
+.sav-pct{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--accent);}
+.sav-track{height:10px;background:var(--sage-pale);border-radius:5px;overflow:hidden;margin-bottom:.6rem;}
+.sav-bar{height:100%;background:linear-gradient(90deg,var(--sage),var(--accent));border-radius:5px;transition:width .7s ease;}
+.sav-meta{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);}
+
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
+@media(max-width:700px){.charts-row{grid-template-columns:1fr;}}
+.chart-card{background:white;border:1px solid var(--border);border-radius:var(--r);padding:1.3rem 1.4rem;}
+.chart-title{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.1rem;}
+.empty{text-align:center;padding:2rem;color:var(--muted);font-size:.82rem;line-height:1.7;}
+.empty-ico{font-size:2rem;display:block;margin-bottom:.6rem;opacity:.3;}
+
+/* DONUT */
+.donut-wrap{display:flex;align-items:center;gap:1.2rem;}
+.donut-svg-wrap{position:relative;width:120px;height:120px;flex-shrink:0;}
+.donut-svg-wrap svg{transform:rotate(-90deg);}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.donut-center-v{font-family:'Cormorant Garamond',serif;font-size:1.2rem;}
+.donut-center-l{font-size:.58rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
+.legend{flex:1;display:flex;flex-direction:column;gap:.45rem;}
+.leg-item{display:flex;align-items:center;gap:.45rem;font-size:.72rem;}
+.leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.leg-name{flex:1;color:var(--muted);}
+.leg-val{font-weight:500;}
+.leg-pct{color:var(--muted);font-size:.65rem;}
+
+/* BAR CHART */
+.bar-list{display:flex;flex-direction:column;gap:.65rem;}
+.brow{display:flex;flex-direction:column;gap:.2rem;}
+.brow-top{display:flex;justify-content:space-between;font-size:.7rem;}
+.brow-name{color:var(--muted);}
+.brow-vals{color:var(--ink);}
+.btrack{height:8px;background:var(--sage-pale);border-radius:4px;position:relative;overflow:hidden;}
+.bbudget{height:100%;background:var(--sage-light);border-radius:4px;position:absolute;top:0;left:0;transition:width .6s ease;}
+.bactual{height:5px;border-radius:3px;position:absolute;top:50%;transform:translateY(-50%);left:0;transition:width .6s ease;}
+.bactual.ok{background:var(--sage);}
+.bactual.over{background:var(--terra);}
+.bar-legend{display:flex;gap:1rem;margin-top:.8rem;font-size:.65rem;color:var(--muted);}
+.bl-item{display:flex;align-items:center;gap:.3rem;}
+.bl-swatch{width:12px;height:4px;border-radius:2px;}
+
+/* UPGRADE GATE */
+.upgrade-gate{background:white;border:1.5px dashed var(--sage-light);border-radius:var(--r);padding:1.5rem;text-align:center;position:relative;overflow:hidden;}
+.upgrade-gate::before{content:'';position:absolute;inset:0;background:rgba(253,252,250,.7);backdrop-filter:blur(2px);pointer-events:none;}
+.gate-inner{position:relative;z-index:1;}
+.gate-icon{font-size:1.8rem;margin-bottom:.6rem;display:block;}
+.gate-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:400;margin-bottom:.4rem;}
+.gate-body{font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;}
+.btn-upgrade{background:var(--sage);color:white;border:none;padding:.6rem 1.4rem;border-radius:2rem;font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer;transition:background .2s;letter-spacing:.06em;}
+.btn-upgrade:hover{background:var(--accent);}
+
+/* SAVINGS CALC */
+.calc-section{background:var(--cream);border-radius:24px;padding:3rem 2.5rem;margin-top:2rem;}
+.calc-inner{max-width:680px;margin:0 auto;text-align:center;}
+.calc-inner h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:300;margin-bottom:.7rem;}
+.calc-inner h2 em{font-style:italic;color:var(--sage);}
+.calc-inner p{font-size:.9rem;color:var(--muted);line-height:1.75;margin-bottom:1.8rem;}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.4rem;}
+@media(max-width:600px){.calc-grid{grid-template-columns:1fr;}}
+.calc-field{background:white;border:1px solid var(--border);border-radius:12px;padding:.95rem 1.1rem;text-align:left;}
+.calc-field label{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:.4rem;}
+.calc-field-row{display:flex;align-items:center;gap:.35rem;}
+.calc-field-row span{color:var(--muted);font-size:.82rem;}
+.calc-field input{border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:1.05rem;color:var(--ink);width:100%;background:transparent;}
+.calc-result{background:var(--ink);color:white;border-radius:14px;padding:1.6rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;text-align:center;}
+.cr-lbl{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;opacity:.4;display:block;margin-bottom:.4rem;}
+.cr-val{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;display:block;}
+.cr-val.g{color:#a8d5a0;}
+.cr-note{font-size:.65rem;opacity:.35;margin-top:.2rem;display:block;}
+
+/* PRICING */
+.pricing-section{background:var(--cream);}
+.pricing-inner{max-width:980px;margin:0 auto;}
+.pricing-header{text-align:center;margin-bottom:3.5rem;}
+.pricing-header .s-body{margin:0 auto;text-align:center;}
+.billing-toggle{display:flex;align-items:center;gap:.8rem;justify-content:center;margin-top:1.5rem;}
+.billing-toggle span{font-size:.8rem;color:var(--muted);}
+.toggle-wrap{position:relative;width:44px;height:24px;cursor:pointer;}
+.toggle-wrap input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:var(--sage-pale);border-radius:12px;border:1px solid var(--border);transition:.3s;}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:2px;bottom:2px;background:var(--sage);border-radius:50%;transition:.3s;}
+.toggle-wrap input:checked + .toggle-slider::before{transform:translateX(20px);}
+.toggle-wrap input:checked + .toggle-slider{background:var(--sage-pale);}
+.save-badge{background:var(--gold);color:white;font-size:.65rem;padding:.2rem .55rem;border-radius:1rem;letter-spacing:.08em;}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+@media(max-width:780px){.plans-grid{grid-template-columns:1fr;}}
+.plan-card{background:white;border:1px solid var(--border);border-radius:20px;padding:2rem 1.8rem;position:relative;transition:transform .2s,box-shadow .2s;}
+.plan-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(44,44,42,.09);}
+.plan-card.featured{border-color:var(--sage);border-width:2px;background:white;}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--sage);color:white;font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;padding:.28rem .9rem;border-radius:2rem;white-space:nowrap;}
+.plan-icon{font-size:1.8rem;margin-bottom:.9rem;display:block;}
+.plan-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;margin-bottom:.3rem;}
+.plan-tagline{font-size:.78rem;color:var(--muted);margin-bottom:1.4rem;line-height:1.5;}
+.plan-price{margin-bottom:1.6rem;}
+.plan-price .amount{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--ink);line-height:1;}
+.plan-price .period{font-size:.78rem;color:var(--muted);margin-left:.2rem;}
+.plan-price .yearly-note{font-size:.7rem;color:var(--muted);display:block;margin-top:.3rem;}
+.plan-price .free-lbl{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--sage);}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-bottom:2rem;}
+.plan-features li{display:flex;align-items:flex-start;gap:.6rem;font-size:.82rem;line-height:1.5;color:var(--muted);}
+.plan-features li.yes{color:var(--ink);}
+.plan-features li .tick{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;margin-top:1px;}
+.plan-features li.yes .tick{background:var(--sage-pale);color:var(--accent);}
+.plan-features li.no .tick{background:var(--cream);color:var(--muted);}
+.plan-features li.no{text-decoration:none;opacity:.5;}
+.plan-btn{width:100%;padding:.85rem;border-radius:2rem;font-family:'DM Sans',sans-serif;font-size:.82rem;letter-spacing:.06em;cursor:pointer;border:none;transition:all .2s;}
+.plan-btn.outline{background:transparent;border:1.5px solid var(--border);color:var(--ink);}
+.plan-btn.outline:hover{border-color:var(--sage);color:var(--sage);}
+.plan-btn.filled{background:var(--sage);color:white;}
+.plan-btn.filled:hover{background:var(--accent);}
+.plan-btn.dark{background:var(--ink);color:white;}
+.plan-btn.dark:hover{background:var(--accent);}
+
+/* WAITLIST MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(37,37,32,.6);z-index:500;backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1.5rem;}
+.modal-bg.show{display:flex;}
+.modal{background:white;border-radius:24px;padding:2.5rem;max-width:440px;width:100%;position:relative;animation:modalIn .3s ease;}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.modal-close{position:absolute;top:1.2rem;right:1.4rem;background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);}
+.modal-close:hover{color:var(--ink);}
+.modal-icon{font-size:2.5rem;text-align:center;margin-bottom:1rem;display:block;}
+.modal h2{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;text-align:center;margin-bottom:.5rem;}
+.modal h2 em{font-style:italic;color:var(--sage);}
+.modal p{font-size:.85rem;color:var(--muted);text-align:center;line-height:1.7;margin-bottom:1.8rem;}
+.modal-plan-badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--sage-pale);color:var(--accent);font-size:.72rem;padding:.3rem .8rem;border-radius:2rem;border:1px solid var(--border);margin:0 auto .8rem;display:flex;justify-content:center;}
+.waitlist-form{display:flex;flex-direction:column;gap:.8rem;}
+.waitlist-form input{border:1.5px solid var(--border);border-radius:10px;padding:.8rem 1rem;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);outline:none;transition:border-color .2s;}
+.waitlist-form input:focus{border-color:var(--sage);}
+.waitlist-form button{background:var(--ink);color:white;border:none;padding:.9rem;border-radius:2rem;font-family:'DM Sans',sans-serif;font-size:.85rem;letter-spacing:.06em;cursor:pointer;transition:background .2s;}
+.waitlist-form button:hover{background:var(--accent);}
+.modal-note{font-size:.72rem;color:var(--muted);text-align:center;margin-top:.8rem;line-height:1.6;}
+.success-state{display:none;text-align:center;padding:1rem 0;}
+.success-state .tick-circle{width:56px;height:56px;background:var(--sage-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 1rem;}
+.success-state h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;margin-bottom:.5rem;}
+.success-state p{font-size:.85rem;color:var(--muted);line-height:1.7;}
+
+/* FEATURE GRID */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;max-width:980px;margin:3rem auto 0;}
+@media(max-width:780px){.features-grid{grid-template-columns:1fr 1fr;}}
+.feat-card{background:white;border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.4rem;}
+.feat-card .ico{font-size:1.6rem;margin-bottom:.8rem;display:block;}
+.feat-card h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;margin-bottom:.4rem;}
+.feat-card p{font-size:.78rem;color:var(--muted);line-height:1.65;}
+.feat-card .pro-tag{display:inline-block;background:var(--sage-pale);color:var(--accent);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .55rem;border-radius:1rem;margin-bottom:.6rem;}
+
+/* REVIEW */
+.review-section{background:var(--ink);color:white;text-align:center;}
+.review-inner{max-width:700px;margin:0 auto;}
+.stars{font-size:1.2rem;margin-bottom:1.5rem;letter-spacing:.08em;}
+.review-q{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:300;font-style:italic;line-height:1.45;margin-bottom:1.5rem;}
+.review-author{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;opacity:.4;}
+
+/* FOOTER */
+footer{background:var(--ink);color:rgba(255,255,255,.3);padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;font-size:.75rem;border-top:1px solid rgba(255,255,255,.06);}
+.foot-logo{font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(255,255,255,.5);}
+
+/* ANIM */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.vis{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Calm<span>Mindset</span>Co</a>
+  <div class="nav-links">
+    <a href="#tool">Free Tool</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#features">Features</a>
+    <a href="#" class="nav-cta" onclick="openModal('Pro');return false;">Join waitlist →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-orb2"></div>
+  <span class="pill">🌿 Free forever · Pro coming soon</span>
+  <h1>Your money,<br><em>finally at peace.</em></h1>
+  <p class="hero-sub">A calm, beautiful budgeting tool for people who find money stressful. Free to use right now — with powerful upgrades coming soon.</p>
+  <div class="hero-actions">
+    <a href="#tool" class="btn-dark">Start budgeting free →</a>
+    <a href="#pricing" class="btn-ghost">See all plans</a>
+  </div>
+  <div class="hero-trust">
+    <span class="trust-item">✓ No account needed to start</span>
+    <span class="trust-item">✓ No card required</span>
+    <span class="trust-item">⭐ 5-star rated approach</span>
+    <span class="trust-item">🌿 Built for calm, not chaos</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-inner">
+    <span class="m-item"><span class="m-dot"></span>Free Budget Tool</span>
+    <span class="m-item"><span class="m-dot"></span>Live Charts</span>
+    <span class="m-item"><span class="m-dot"></span>Savings Calculator</span>
+    <span class="m-item"><span class="m-dot"></span>Pro: Couples Mode</span>
+    <span class="m-item"><span class="m-dot"></span>Pro: Debt Tracker</span>
+    <span class="m-item"><span class="m-dot"></span>Pro: Annual Dashboard</span>
+    <span class="m-item"><span class="m-dot"></span>Pro: AI Insights</span>
+    <span class="m-item"><span class="m-dot"></span>Family Plan Available</span>
+    <span class="m-item"><span class="m-dot"></span>Free Budget Tool</span>
+    <span class="m-item"><span class="m-dot"></span>Live Charts</span>
+    <span class="m-item"><span class="m-dot"></span>Savings Calculator</span>
+    <span class="m-item"><span class="m-dot"></span>Pro: Couples Mode</span>
+    <span class="m-item"><span class="m-dot"></span>Pro: Debt Tracker</span>
+    <span class="m-item"><span class="m-dot"></span>Pro: Annual Dashboard</span>
+    <span class="m-item"><span class="m-dot"></span>Pro: AI Insights</span>
+    <span class="m-item"><span class="m-dot"></span>Family Plan Available</span>
+  </div>
+</div>
+
+<!-- FREE TOOL -->
+<section style="padding:5rem 2.5rem;" id="tool">
+  <div class="tool-wrap">
+    <div class="tool-header reveal">
+      <span class="s-tag">Free budget tool</span>
+      <h2 class="s-title">Enter your numbers.<br><em>See your picture.</em></h2>
+    </div>
+
+    <div class="settings-bar reveal">
+      <div class="setting-pill">
+        <label>Currency</label>
+        <select id="currSel" onchange="setCurrency()">
+          <option value="£">£ GBP</option><option value="$">$ USD</option>
+          <option value="€">€ EUR</option><option value="₦">₦ NGN</option>
+          <option value="د.إ">د.إ AED</option><option value="﷼">﷼ SAR</option>
+          <option value="other">Other…</option>
+        </select>
+      </div>
+      <div class="setting-pill" id="customWrap" style="display:none">
+        <label>Symbol</label>
+        <input type="text" id="customCurr" maxlength="4" placeholder="₹" oninput="setCurrCustom()" style="width:45px">
+      </div>
+      <div class="setting-pill">
+        <label>Month</label>
+        <select id="monthSel">
+          <option>January</option><option>February</option><option>March</option>
+          <option>April</option><option>May</option><option>June</option>
+          <option>July</option><option>August</option><option>September</option>
+          <option>October</option><option>November</option><option>December</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="tool-grid">
+      <div class="input-panel" id="inputPanel"></div>
+      <div class="results-panel">
+        <!-- SUMMARY -->
+        <div class="sum-row">
+          <div class="sum-card inc"><span class="s-lbl">💰 Money In</span><span class="s-val g" id="totIn">—</span><span class="s-note">Total income</span></div>
+          <div class="sum-card out"><span class="s-lbl">💸 Money Out</span><span class="s-val r" id="totOut">—</span><span class="s-note">Total spending</span></div>
+          <div class="sum-card lft"><span class="s-lbl">🧘 Remaining</span><span class="s-val gold" id="totLeft">—</span><span class="s-note">Money left</span></div>
+        </div>
+
+        <!-- DAILY -->
+        <div class="daily-card">
+          <div>
+            <h3>Daily spendable</h3>
+            <div class="daily-num" id="dailyNum">—</div>
+            <div class="daily-note" id="dailyNote">Enter your income above</div>
+          </div>
+          <div class="ring-wrap">
+            <svg width="76" height="76" viewBox="0 0 76 76">
+              <circle class="ring-bg" cx="38" cy="38" r="32"/>
+              <circle class="ring-arc" id="ringArc" cx="38" cy="38" r="32" stroke-dasharray="201" stroke-dashoffset="201"/>
+            </svg>
+            <div class="ring-lbl"><span id="ringPct">0%</span><span>saved</span></div>
+          </div>
+        </div>
+
+        <!-- SAVINGS -->
+        <div class="sav-card">
+          <div class="sav-hdr"><h3>🌱 Savings progress</h3><span class="sav-pct" id="savPct">0%</span></div>
+          <div class="sav-track"><div class="sav-bar" id="savBar" style="width:0%"></div></div>
+          <div class="sav-meta"><span id="savAmt">Set a savings budget to track progress</span><span id="savGoal"></span></div>
+        </div>
+
+        <!-- CHARTS -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-title">🍩 Spending by category</div>
+            <div id="donutWrap"><div class="empty"><span class="empty-ico">🌿</span>Enter expenses to see breakdown</div></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">📊 Budgeted vs actual</div>
+            <div id="barWrap"><div class="empty"><span class="empty-ico">📊</span>Enter budgeted &amp; actual to compare</div></div>
+          </div>
+        </div>
+
+        <!-- PRO GATES -->
+        <div class="charts-row">
+          <div class="upgrade-gate">
+            <div class="gate-inner">
+              <span class="gate-icon">📅</span>
+              <div class="gate-title">Annual Dashboard</div>
+              <div class="gate-body">See all 12 months at once. Track spending trends, saving patterns, and your biggest expense months across the full year.</div>
+              <button class="btn-upgrade" onclick="openModal('Pro')">Unlock with Pro →</button>
+            </div>
+          </div>
+          <div class="upgrade-gate">
+            <div class="gate-inner">
+              <span class="gate-icon">💑</span>
+              <div class="gate-title">Couples Budget Mode</div>
+              <div class="gate-body">Combine two incomes, split shared expenses, and see your household budget in one shared view. Perfect for partners managing money together.</div>
+              <button class="btn-upgrade" onclick="openModal('Family')">Unlock with Family →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="upgrade-gate">
+          <div class="gate-inner" style="display:flex;align-items:center;gap:1.5rem;text-align:left;flex-wrap:wrap;">
+            <span style="font-size:2rem">🤖</span>
+            <div style="flex:1;">
+              <div class="gate-title" style="margin-bottom:.3rem;">AI-Powered Spending Insights</div>
+              <div class="gate-body" style="margin-bottom:0">"You spent 32% more on dining out this month — here's where it went." Personalised insights that notice what you'd miss.</div>
+            </div>
+            <button class="btn-upgrade" onclick="openModal('Pro')" style="white-space:nowrap;">Coming soon — join Pro waitlist</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAVINGS CALC -->
+    <div class="calc-section reveal">
+      <div class="calc-inner">
+        <h2>How much could you <em>save?</em></h2>
+        <p>See what consistent saving looks like over time. Small amounts, compounded, become something remarkable.</p>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Monthly savings</label>
+            <div class="calc-field-row"><span id="cs1">£</span><input type="number" id="cSav" placeholder="300" min="0" oninput="calcProj()"></div>
+          </div>
+          <div class="calc-field">
+            <label>Years saving</label>
+            <div class="calc-field-row"><input type="number" id="cYrs" placeholder="3" min="1" max="30" value="3" oninput="calcProj()"><span>yrs</span></div>
+          </div>
+          <div class="calc-field">
+            <label>Interest rate (% p.a.)</label>
+            <div class="calc-field-row"><input type="number" id="cRate" placeholder="4.5" step=".1" value="4.5" oninput="calcProj()"><span>%</span></div>
+          </div>
+          <div class="calc-field">
+            <label>Lump sum start</label>
+            <div class="calc-field-row"><span id="cs2">£</span><input type="number" id="cLump" placeholder="0" min="0" value="0" oninput="calcProj()"></div>
+          </div>
+        </div>
+        <div class="calc-result">
+          <div><span class="cr-lbl">You put in</span><span class="cr-val" id="crContrib">—</span><span class="cr-note">contributions</span></div>
+          <div><span class="cr-lbl">Interest earned</span><span class="cr-val g" id="crInt">—</span><span class="cr-note">free money 🌿</span></div>
+          <div><span class="cr-lbl">Total saved</span><span class="cr-val g" id="crTot">—</span><span class="cr-note">after <span id="crYrs">3</span> years</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="pricing-inner">
+    <div class="pricing-header reveal">
+      <span class="s-tag">Simple pricing</span>
+      <h2 class="s-title">Start free.<br><em>Upgrade when you're ready.</em></h2>
+      <p class="s-body" style="margin:.8rem auto 0;text-align:center;">No pressure, no credit card needed. Use the free tool forever, and unlock the good stuff when it makes sense for you.</p>
+      <div class="billing-toggle">
+        <span>Monthly</span>
+        <label class="toggle-wrap"><input type="checkbox" id="billingToggle" onchange="toggleBilling()"><span class="toggle-slider"></span></label>
+        <span>Yearly</span>
+        <span class="save-badge">Save 35%</span>
+      </div>
+    </div>
+
+    <div class="plans-grid">
+      <!-- FREE -->
+      <div class="plan-card reveal">
+        <span class="plan-icon">🌿</span>
+        <div class="plan-name">Free</div>
+        <div class="plan-tagline">Everything you need to start your calm money journey.</div>
+        <div class="plan-price"><span class="free-lbl">£0</span><span class="period">/ forever</span></div>
+        <ul class="plan-features">
+          <li class="yes"><span class="tick">✓</span>Full monthly budget tool</li>
+          <li class="yes"><span class="tick">✓</span>Live donut &amp; bar charts</li>
+          <li class="yes"><span class="tick">✓</span>Daily spendable calculator</li>
+          <li class="yes"><span class="tick">✓</span>Savings progress tracker</li>
+          <li class="yes"><span class="tick">✓</span>Savings projection calculator</li>
+          <li class="yes"><span class="tick">✓</span>Any currency support</li>
+          <li class="no"><span class="tick">—</span>Save &amp; sync across devices</li>
+          <li class="no"><span class="tick">—</span>Budget history</li>
+          <li class="no"><span class="tick">—</span>Debt tracker</li>
+        </ul>
+        <a href="#tool"><button class="plan-btn outline">Use for free</button></a>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan-card featured reveal" style="transition-delay:.1s">
+        <div class="plan-badge">Most popular</div>
+        <span class="plan-icon">⚡</span>
+        <div class="plan-name">Pro</div>
+        <div class="plan-tagline">For individuals who want the full picture of their finances.</div>
+        <div class="plan-price">
+          <span class="amount" id="proPrice">£4.99</span>
+          <span class="period" id="proPeriod">/ month</span>
+          <span class="yearly-note" id="proYearNote" style="display:none"></span>
+        </div>
+        <ul class="plan-features">
+          <li class="yes"><span class="tick">✓</span>Everything in Free</li>
+          <li class="yes"><span class="tick">✓</span>Login &amp; save across devices</li>
+          <li class="yes"><span class="tick">✓</span>Budget history &amp; month comparison</li>
+          <li class="yes"><span class="tick">✓</span>Annual dashboard (12-month view)</li>
+          <li class="yes"><span class="tick">✓</span>Debt tracker &amp; payoff planner</li>
+          <li class="yes"><span class="tick">✓</span>Export to PDF &amp; Excel</li>
+          <li class="yes"><span class="tick">✓</span>AI spending insights <em style="font-size:.7rem;color:var(--muted)">(coming soon)</em></li>
+          <li class="no"><span class="tick">—</span>Couples / shared mode</li>
+        </ul>
+        <button class="plan-btn filled" onclick="openModal('Pro')">Join Pro waitlist →</button>
+      </div>
+
+      <!-- FAMILY -->
+      <div class="plan-card reveal" style="transition-delay:.2s">
+        <span class="plan-icon">💑</span>
+        <div class="plan-name">Family</div>
+        <div class="plan-tagline">For couples and households managing money together.</div>
+        <div class="plan-price">
+          <span class="amount" id="famPrice">£8.99</span>
+          <span class="period" id="famPeriod">/ month</span>
+          <span class="yearly-note" id="famYearNote" style="display:none"></span>
+        </div>
+        <ul class="plan-features">
+          <li class="yes"><span class="tick">✓</span>Everything in Pro</li>
+          <li class="yes"><span class="tick">✓</span>Couples budget mode</li>
+          <li class="yes"><span class="tick">✓</span>Shared household view</li>
+          <li class="yes"><span class="tick">✓</span>Split expense tracking</li>
+          <li class="yes"><span class="tick">✓</span>Up to 2 users</li>
+          <li class="yes"><span class="tick">✓</span>Shared savings goals</li>
+          <li class="yes"><span class="tick">✓</span>Combined annual dashboard</li>
+          <li class="yes"><span class="tick">✓</span>Priority support</li>
+        </ul>
+        <button class="plan-btn dark" onclick="openModal('Family')">Join Family waitlist →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section style="padding:6rem 2.5rem;background:var(--warm);" id="features">
+  <div style="max-width:980px;margin:0 auto;">
+    <div class="reveal" style="text-align:center;margin-bottom:1rem">
+      <span class="s-tag">What's coming in Pro</span>
+      <h2 class="s-title">Built for real life,<br><em>not spreadsheet nerds.</em></h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card reveal">
+        <span class="pro-tag">Pro</span>
+        <span class="ico">💾</span>
+        <h3>Save &amp; sync</h3>
+        <p>Your budget saves automatically and syncs across all your devices. Pick up where you left off, every time.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.08s">
+        <span class="pro-tag">Pro</span>
+        <span class="ico">📅</span>
+        <h3>Annual dashboard</h3>
+        <p>See all 12 months laid out together. Spot seasonal patterns, track your best saving months, and see how far you've come.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.16s">
+        <span class="pro-tag">Pro</span>
+        <span class="ico">💳</span>
+        <h3>Debt payoff planner</h3>
+        <p>Add your debts — credit cards, loans, buy now pay later — and see exactly when you'll be debt-free with a calm, clear payoff plan.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.08s">
+        <span class="pro-tag">Pro</span>
+        <span class="ico">📊</span>
+        <h3>Month comparison</h3>
+        <p>Compare this month to last month, or any two months side by side. See what changed and why, without the mental maths.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.16s">
+        <span class="pro-tag">Pro</span>
+        <span class="ico">🤖</span>
+        <h3>AI insights</h3>
+        <p>Personalised observations about your spending — the kind a good friend with a finance degree might notice — delivered calmly, without judgment.</p>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.24s">
+        <span class="pro-tag">Family</span>
+        <span class="ico">💑</span>
+        <h3>Couples mode</h3>
+        <p>Two incomes, one budget. Split bills, track shared goals, and finally have the money conversation without the stress.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEW -->
+<section class="review-section">
+  <div class="review-inner reveal">
+    <div class="stars">⭐⭐⭐⭐⭐</div>
+    <div class="review-q">"100% would recommend — simple and intuitive with no information overload."</div>
+    <div class="review-author">Verified buyer · CalmMindsetCo · 5.0 rating</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="foot-logo">CalmMindsetCo</span>
+  <span>Your data never leaves your device (free tool) · © 2026 CalmMindsetCo</span>
+  <span>Made with 🌿 for calm finances</span>
+</footer>
+
+<!-- WAITLIST MODAL -->
+<div class="modal-bg" id="modalBg" onclick="closeModalBg(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <span class="modal-icon" id="modalIcon">⚡</span>
+    <div class="modal-plan-badge" id="modalBadge">Pro Plan</div>
+    <h2 id="modalTitle">Join the <em>waitlist</em></h2>
+    <p id="modalBody">Be first to know when Pro launches. Early waitlist members get a special founding rate — locked in for life.</p>
+    <div class="waitlist-form" id="waitlistForm">
+      <input type="text" placeholder="Your name" id="wlName">
+      <input type="email" placeholder="Your email address" id="wlEmail">
+      <button onclick="submitWaitlist()">Reserve my spot 🌿</button>
+    </div>
+    <div class="success-state" id="successState">
+      <div class="tick-circle">🌿</div>
+      <h3>You're on the list!</h3>
+      <p>We'll email you the moment <span id="successPlan">Pro</span> launches — along with your exclusive founding member rate. Thank you for being part of this from the start.</p>
+    </div>
+    <p class="modal-note">No spam. Just one email when we launch. Unsubscribe any time.</p>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const CATS=[
+  {id:'inflow',name:'Inflow',emoji:'💰',color:'#7d9b6e',isIncome:true,
+    subs:[{id:'salary',label:'💰 Salary'},{id:'divs',label:'📈 Dividends'},{id:'interest',label:'💵 Interest'},{id:'sidegig',label:'💸 Side Gig'},{id:'other',label:'✨ Other Income'}]},
+  {id:'essentials',name:'Essentials',emoji:'🌿',color:'#5a7fa0',
+    subs:[{id:'rent',label:'🏠 Rent / Mortgage'},{id:'groceries',label:'🥦 Groceries'},{id:'bills',label:'💡 Bills'}]},
+  {id:'lifestyle',name:'Lifestyle',emoji:'✨',color:'#c4714a',
+    subs:[{id:'eatingout',label:'🍽️ Eating Out'},{id:'shopping',label:'🛍️ Shopping'}]},
+  {id:'futureme',name:'Future Me',emoji:'🌱',color:'#4e7a3e',
+    subs:[{id:'savings',label:'🧘 Savings'},{id:'investments',label:'📈 Investments'}]},
+  {id:'joy',name:'Joy',emoji:'🎉',color:'#9b7ab5',
+    subs:[{id:'fun',label:'🎉 Fun'},{id:'travel',label:'✈️ Travel'},{id:'hobbies',label:'🎨 Hobbies'}]},
+  {id:'giving',name:'Giving',emoji:'🤝',color:'#c98b5a',
+    subs:[{id:'giving',label:'🤝 Giving / Zakat'}]}
+];
+const budg={};const act={};
+CATS.forEach(c=>{budg[c.id]={};act[c.id]={};});
+let curr='£';
+const daysLeft=30-new Date().getDate()+1;
+
+// auto month
+(()=>{
+  const M=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('monthSel').value=M[new Date().getMonth()];
+})();
+
+// ── BUILD INPUTS ──
+function buildInputs(){
+  const p=document.getElementById('inputPanel');p.innerHTML='';
+  CATS.forEach(c=>{
+    const sec=document.createElement('div');sec.className='cat-block';sec.id='sec_'+c.id;
+    if(['inflow','essentials'].includes(c.id))sec.classList.add('open');
+    const hdr=document.createElement('div');hdr.className='cat-hdr';
+    hdr.innerHTML=`<span class="emoji">${c.emoji}</span><span class="name">${c.name}</span><span class="tot" id="ct_${c.id}"></span><span class="chev">▼</span>`;
+    hdr.onclick=()=>sec.classList.toggle('open');
+    const body=document.createElement('div');body.className='cat-body';
+    if(!c.isIncome){
+      const h=document.createElement('div');h.className='col-labels';
+      h.innerHTML='<span class="col-label">Budgeted</span><span class="col-label">Actual</span>';
+      body.appendChild(h);
+    }
+    c.subs.forEach(s=>{
+      const row=document.createElement('div');row.className='irow';
+      if(c.isIncome){
+        row.innerHTML=`<span class="irow-label">${s.label}</span>
+          <div class="inp-wrap"><span class="sym c-sym">${curr}</span>
+          <input class="amt" type="number" min="0" placeholder="0" data-cat="${c.id}" data-sub="${s.id}" data-type="budget" oninput="onInput(this)" value="${budg[c.id][s.id]||''}"></div>`;
+      }else{
+        row.innerHTML=`<span class="irow-label">${s.label}</span>
+          <div class="irow-inputs">
+            <div class="inp-wrap"><span class="sym c-sym">${curr}</span><input class="amt" type="number" min="0" placeholder="0" data-cat="${c.id}" data-sub="${s.id}" data-type="budget" oninput="onInput(this)" value="${budg[c.id][s.id]||''}"></div>
+            <div class="inp-wrap"><span class="sym c-sym">${curr}</span><input class="amt" type="number" min="0" placeholder="0" data-cat="${c.id}" data-sub="${s.id}" data-type="actual" oninput="onInput(this)" value="${act[c.id][s.id]||''}"></div>
+          </div>`;
+      }
+      body.appendChild(row);
+    });
+    sec.appendChild(hdr);sec.appendChild(body);p.appendChild(sec);
+  });
+}
+function onInput(el){
+  const {cat,sub,type}=el.dataset;
+  const v=parseFloat(el.value)||0;
+  if(type==='budget')budg[cat][sub]=v;else act[cat][sub]=v;
+  update();
+}
+
+// ── CALC ──
+function cTot(store,id){return Object.values(store[id]||{}).reduce((a,b)=>a+b,0);}
+function grandTot(store,ex=['inflow']){return CATS.filter(c=>!ex.includes(c.id)).reduce((s,c)=>s+cTot(store,c.id),0);}
+function fmt(n){return curr+n.toLocaleString('en-GB',{minimumFractionDigits:0,maximumFractionDigits:0});}
+
+function update(){
+  const tIn=cTot(budg,'inflow');
+  const tOutAct=grandTot(act);
+  const tLeft=tIn-tOutAct;
+  const savB=cTot(budg,'futureme');
+  const savA=cTot(act,'futureme');
+  // cat totals
+  CATS.forEach(c=>{
+    const el=document.getElementById('ct_'+c.id);if(!el)return;
+    const t=cTot(c.isIncome?budg:act,c.id);
+    el.textContent=t?fmt(t):'';
+  });
+  // summary
+  document.getElementById('totIn').textContent=tIn?fmt(tIn):'—';
+  document.getElementById('totOut').textContent=tOutAct?fmt(tOutAct):'—';
+  document.getElementById('totLeft').textContent=tIn?fmt(tLeft):'—';
+  // daily
+  if(tIn){
+    const d=Math.max(0,tLeft/Math.max(daysLeft,1));
+    document.getElementById('dailyNum').textContent=fmt(d);
+    document.getElementById('dailyNote').textContent=`for the next ${daysLeft} days this month`;
+    const pct=Math.min(1,savA/Math.max(tIn,1));
+    document.getElementById('ringArc').style.strokeDashoffset=201*(1-pct);
+    document.getElementById('ringPct').textContent=Math.round(pct*100)+'%';
+  }else{
+    document.getElementById('dailyNum').textContent='—';
+    document.getElementById('dailyNote').textContent='Enter your income above';
+  }
+  // savings bar
+  if(savB){
+    const p=Math.min(100,Math.round(savA/savB*100));
+    document.getElementById('savPct').textContent=p+'%';
+    document.getElementById('savBar').style.width=p+'%';
+    document.getElementById('savAmt').textContent=fmt(savA)+' saved';
+    document.getElementById('savGoal').textContent='Goal: '+fmt(savB);
+  }else{
+    document.getElementById('savPct').textContent='0%';
+    document.getElementById('savBar').style.width='0%';
+    document.getElementById('savAmt').textContent='Set a savings budget to track progress';
+    document.getElementById('savGoal').textContent='';
+  }
+  drawDonut(tOutAct);
+  drawBar();
+  document.querySelectorAll('#cs1,#cs2').forEach(e=>e.textContent=curr);
+  calcProj();
+}
+
+// ── DONUT ──
+function drawDonut(total){
+  const w=document.getElementById('donutWrap');
+  const expCats=CATS.filter(c=>!c.isIncome);
+  const vals=expCats.map(c=>({...c,val:cTot(act,c.id)}));
+  if(!vals.some(v=>v.val>0)){w.innerHTML='<div class="empty"><span class="empty-ico">🌿</span>Enter expenses to see breakdown</div>';return;}
+  const R=50,cx=60,cy=60,sz=120,circ=2*Math.PI*R;
+  let off=0,paths='';
+  vals.forEach(v=>{
+    if(!v.val)return;
+    const d=v.val/total*circ;
+    paths+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${v.color}" stroke-width="16" stroke-dasharray="${d} ${circ-d}" stroke-dashoffset="${-off}" style="transition:all .6s ease"/>`;
+    off+=d;
+  });
+  const leg=vals.filter(v=>v.val>0).map(v=>`<div class="leg-item"><span class="leg-dot" style="background:${v.color}"></span><span class="leg-name">${v.emoji} ${v.name}</span><span class="leg-val">${fmt(v.val)}</span><span class="leg-pct">${Math.round(v.val/total*100)}%</span></div>`).join('');
+  w.innerHTML=`<div class="donut-wrap"><div class="donut-svg-wrap"><svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" style="transform:rotate(-90deg)"><circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="var(--sage-pale)" stroke-width="16"/>${paths}</svg><div class="donut-center"><span class="donut-center-v">${fmt(total)}</span><span class="donut-center-l">total</span></div></div><div class="legend">${leg}</div></div>`;
+}
+
+// ── BAR ──
+function drawBar(){
+  const w=document.getElementById('barWrap');
+  const rows=[];
+  CATS.filter(c=>!c.isIncome).forEach(c=>{
+    c.subs.forEach(s=>{
+      const b=budg[c.id][s.id]||0,a=act[c.id][s.id]||0;
+      if(b||a)rows.push({name:s.label,b,a,color:c.color});
+    });
+  });
+  if(!rows.length){w.innerHTML='<div class="empty"><span class="empty-ico">📊</span>Enter budgeted &amp; actual to compare</div>';return;}
+  const mx=Math.max(...rows.map(r=>Math.max(r.b,r.a)),1);
+  const html=rows.map(r=>{
+    const bw=Math.round(r.b/mx*100),aw=Math.round(r.a/mx*100),over=r.a>r.b&&r.b>0;
+    return `<div class="brow"><div class="brow-top"><span class="brow-name">${r.name}</span><span class="brow-vals">${r.b?fmt(r.b):'—'} / ${r.a?fmt(r.a):'—'}</span></div><div class="btrack"><div class="bbudget" style="width:${bw}%"></div><div class="bactual ${over?'over':'ok'}" style="width:${aw}%"></div></div></div>`;
+  }).join('');
+  w.innerHTML=`<div class="bar-list">${html}</div><div class="bar-legend"><div class="bl-item"><span class="bl-swatch" style="background:var(--sage-light)"></span>Budgeted</div><div class="bl-item"><span class="bl-swatch" style="background:var(--sage)"></span>Actual (ok)</div><div class="bl-item"><span class="bl-swatch" style="background:var(--terra)"></span>Over budget</div></div>`;
+}
+
+// ── SAVINGS CALC ──
+function calcProj(){
+  const mo=parseFloat(document.getElementById('cSav').value)||0;
+  const yr=parseFloat(document.getElementById('cYrs').value)||3;
+  const rt=parseFloat(document.getElementById('cRate').value)||0;
+  const lp=parseFloat(document.getElementById('cLump').value)||0;
+  const mo_=yr*12,r=rt/100/12;
+  const tot=r>0?lp*Math.pow(1+r,mo_)+mo*(Math.pow(1+r,mo_)-1)/r:lp+mo*mo_;
+  const con=lp+mo*mo_;
+  document.getElementById('crContrib').textContent=fmt(con);
+  document.getElementById('crInt').textContent=fmt(Math.max(0,tot-con));
+  document.getElementById('crTot').textContent=fmt(tot);
+  document.getElementById('crYrs').textContent=yr;
+}
+
+// ── CURRENCY ──
+function setCurrency(){
+  const v=document.getElementById('currSel').value;
+  if(v==='other'){document.getElementById('customWrap').style.display='flex';curr=document.getElementById('customCurr').value||'?';}
+  else{document.getElementById('customWrap').style.display='none';curr=v;}
+  document.querySelectorAll('.c-sym').forEach(e=>e.textContent=curr);
+  update();
+}
+function setCurrCustom(){curr=document.getElementById('customCurr').value||'?';document.querySelectorAll('.c-sym').forEach(e=>e.textContent=curr);update();}
+
+// ── BILLING TOGGLE ──
+function toggleBilling(){
+  const yearly=document.getElementById('billingToggle').checked;
+  document.getElementById('proPrice').textContent=yearly?'£39':'£4.99';
+  document.getElementById('proPeriod').textContent=yearly?'/ year':'/ month';
+  document.getElementById('proYearNote').style.display=yearly?'block':'none';
+  document.getElementById('proYearNote').textContent=yearly?'(equivalent to £3.25/mo)':'';
+  document.getElementById('famPrice').textContent=yearly?'£69':'£8.99';
+  document.getElementById('famPeriod').textContent=yearly?'/ year':'/ month';
+  document.getElementById('famYearNote').style.display=yearly?'block':'none';
+  document.getElementById('famYearNote').textContent=yearly?'(equivalent to £5.75/mo)':'';
+}
+
+// ── MODAL ──
+const planMeta={
+  Pro:{icon:'⚡',badge:'⚡ Pro Plan',title:'Join the <em>Pro</em> waitlist',body:"Be first when Pro launches. Waitlist members get a special founding rate — locked in for life as long as you stay subscribed."},
+  Family:{icon:'💑',badge:'💑 Family Plan',title:'Join the <em>Family</em> waitlist',body:"Couples mode is coming. Join the waitlist and we'll let you know the moment shared budgeting goes live — with a founding member rate."}
+};
+let currentPlan='Pro';
+function openModal(plan){
+  currentPlan=plan;
+  const m=planMeta[plan];
+  document.getElementById('modalIcon').textContent=m.icon;
+  document.getElementById('modalBadge').textContent=m.badge;
+  document.getElementById('modalTitle').innerHTML=m.title;
+  document.getElementById('modalBody').textContent=m.body.replace(/<[^>]+>/g,'');
+  document.getElementById('waitlistForm').style.display='flex';
+  document.getElementById('successState').style.display='none';
+  document.getElementById('modalBg').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('modalBg').classList.remove('show');document.body.style.overflow='';}
+function closeModalBg(e){if(e.target===document.getElementById('modalBg'))closeModal();}
+function submitWaitlist(){
+  const name=document.getElementById('wlName').value.trim();
+  const email=document.getElementById('wlEmail').value.trim();
+  if(!email){document.getElementById('wlEmail').focus();return;}
+  document.getElementById('waitlistForm').style.display='none';
+  document.getElementById('successState').style.display='block';
+  document.getElementById('successPlan').textContent=currentPlan;
+  // In production: POST to your email platform here
+  console.log('Waitlist signup:',{name,email,plan:currentPlan});
+}
+
+// ── SCROLL REVEAL ──
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ── INIT ──
+buildInputs();calcProj();
+</script>
+</body>
+</html>
