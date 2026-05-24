@@ -4,15 +4,11 @@ import Tool from './pages/Tool'
 
 export default function App() {
   const { loading } = useAuth()
-  const [showTool, setShowTool] = useState(true)
+  const [showTool, setShowTool] = useState(false)
 
-  // Handle Supabase auth callback — the hash will have access_token
   useEffect(() => {
-    const hash = window.location.hash
-    if (hash.includes('access_token') || hash.includes('error')) {
-      // Supabase SDK handles this automatically via onAuthStateChange
-      // Clear the hash to keep URL clean
-      window.history.replaceState({}, document.title, window.location.pathname)
+    if (window.location.pathname === '/app') {
+      setShowTool(true)
     }
   }, [])
 
@@ -29,10 +25,16 @@ export default function App() {
     </div>
   )
 
-  return (
-    <Tool onClose={() => {
-      // Navigate back to landing page
-      window.location.href = '/'
-    }} />
-  )
+  if (showTool) {
+    return (
+      <Tool onClose={() => {
+        setShowTool(false)
+        window.history.pushState({}, '', '/')
+      }} />
+    )
+  }
+
+  // Landing page — redirect to static HTML
+  window.location.href = '/landing.html'
+  return null
 }
