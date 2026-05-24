@@ -1,4 +1,9 @@
 {
   "buildCommand": "npm run build",
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/app(.*)", "dest": "/dist/index.html" },
+    { "src": "/(.*)", "dest": "/public/$1" }
+  ]
 }
