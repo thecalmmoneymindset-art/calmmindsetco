@@ -3,7 +3,9 @@
   "installCommand": "npm install",
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/app(.*)", "dest": "/dist/index.html" },
-    { "src": "/(.*)", "dest": "/public/$1" }
+    { "src": "/index-landing.html", "dest": "/index-landing.html" },
+    { "src": "/app(.*)", "dest": "/index.html" },
+    { "src": "^/$", "dest": "/index-landing.html" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
