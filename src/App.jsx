@@ -4,41 +4,20 @@ import Tool from './pages/Tool'
 
 export default function App() {
   const { loading } = useAuth()
-  const [showTool, setShowTool] = useState(
-    window.location.pathname === '/app' || window.location.pathname.startsWith('/app/')
-  )
+  const path = window.location.pathname
 
-  if (loading) return (
-    <div style={{
-      display:'flex', alignItems:'center', justifyContent:'center',
-      height:'100vh', fontFamily:"'Sora', sans-serif",
-      background:'#fdfcfa', color:'#7a7971', fontSize:'.85rem'
-    }}>
-      <div style={{textAlign:'center'}}>
-        <div style={{fontSize:'2rem',marginBottom:'1rem'}}>🌿</div>
-        Loading your plan…
-      </div>
-    </div>
-  )
+  useEffect(() => {
+    // If not /app, redirect to landing page
+    if (path !== '/app' && !path.startsWith('/app/')) {
+      window.location.replace('/index-landing.html')
+    }
+  }, [])
 
-  if (showTool) {
-    return (
-      <Tool onClose={() => {
-        window.location.href = '/'
-      }} />
-    )
-  }
+  if (loading || (path !== '/app' && !path.startsWith('/app/'))) return null
 
   return (
-    <div style={{
-      display:'flex', alignItems:'center', justifyContent:'center',
-      height:'100vh', fontFamily:"'Sora', sans-serif",
-      background:'#fdfcfa', color:'#7a7971', fontSize:'.85rem'
-    }}>
-      <div style={{textAlign:'center'}}>
-        <div style={{fontSize:'2rem',marginBottom:'1rem'}}>🌿</div>
-        <a href="/" style={{color:'#7d9b6e'}}>Go to home →</a>
-      </div>
-    </div>
+    <Tool onClose={() => {
+      window.location.href = '/'
+    }} />
   )
 }
