@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
 import Tool from './pages/Tool'
 
 export default function App() {
   const { loading } = useAuth()
-  const path = window.location.pathname
 
-  useEffect(() => {
-    // If not /app, redirect to landing page
-    if (path !== '/app' && !path.startsWith('/app/')) {
-      window.location.replace('/index-landing.html')
-    }
-  }, [])
-
-  if (loading || (path !== '/app' && !path.startsWith('/app/'))) return null
+  if (loading) return (
+    <div style={{
+      display:'flex', alignItems:'center', justifyContent:'center',
+      height:'100vh', fontFamily:"'Sora', sans-serif",
+      background:'#fdfcfa', color:'#7a7971', fontSize:'.85rem'
+    }}>
+      <div style={{textAlign:'center'}}>
+        <div style={{fontSize:'2rem',marginBottom:'1rem'}}>🌿</div>
+        Loading…
+      </div>
+    </div>
+  )
 
   return (
-    <Tool onClose={() => {
-      window.location.href = '/'
-    }} />
+    <Tool onClose={() => window.location.href = '/'} />
   )
 }
