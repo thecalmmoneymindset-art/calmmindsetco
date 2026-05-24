@@ -4,19 +4,15 @@ import Tool from './pages/Tool'
 
 export default function App() {
   const { loading } = useAuth()
-  const [showTool, setShowTool] = useState(false)
-
-  useEffect(() => {
-    if (window.location.pathname === '/app') {
-      setShowTool(true)
-    }
-  }, [])
+  const [showTool, setShowTool] = useState(
+    window.location.pathname === '/app' || window.location.pathname.startsWith('/app/')
+  )
 
   if (loading) return (
     <div style={{
       display:'flex', alignItems:'center', justifyContent:'center',
       height:'100vh', fontFamily:"'Sora', sans-serif",
-      background:'var(--warm)', color:'var(--muted)', fontSize:'.85rem'
+      background:'#fdfcfa', color:'#7a7971', fontSize:'.85rem'
     }}>
       <div style={{textAlign:'center'}}>
         <div style={{fontSize:'2rem',marginBottom:'1rem'}}>🌿</div>
@@ -28,13 +24,21 @@ export default function App() {
   if (showTool) {
     return (
       <Tool onClose={() => {
-        setShowTool(false)
-        window.history.pushState({}, '', '/')
+        window.location.href = '/'
       }} />
     )
   }
 
-  // Landing page — redirect to static HTML
-  window.location.href = '/landing.html'
-  return null
+  return (
+    <div style={{
+      display:'flex', alignItems:'center', justifyContent:'center',
+      height:'100vh', fontFamily:"'Sora', sans-serif",
+      background:'#fdfcfa', color:'#7a7971', fontSize:'.85rem'
+    }}>
+      <div style={{textAlign:'center'}}>
+        <div style={{fontSize:'2rem',marginBottom:'1rem'}}>🌿</div>
+        <a href="/" style={{color:'#7d9b6e'}}>Go to home →</a>
+      </div>
+    </div>
+  )
 }
